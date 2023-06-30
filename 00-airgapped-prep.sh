@@ -5,25 +5,54 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-export INGRESS_DOMAIN=$(yq eval '.ingress_domain' ./gorkem/values.yaml)
+# Assumptions:
+# Harbor is deployed
+# Nexus is deployed
+# Git Server is deployed 
+# TKGS Supervisor is deployed
+# We have a vSphere WCP Namespace we can use to deploy a TKG Cluster
+# We are running on a bastion with internet access
+# User has a VMW Community login, TanzuNet login and has accepted Tanzu EULAs
+# User has a vsphere login that can do 'kubectl vsphere login'
+# User has a Git login (http/web and ssh for clone)
+# User can edit DNS
+# We have a wildcard cert for our TAP domain
+
+# TODOs:
+# remove Minio and plan to use Nexus.  Also Assume a Nexus is up
+# plan to install tools on an AlmaLinux docker image
+# tools to install:
+# pivnet
+# tanzu
+# Kubectl ? or should we get this from Supervisor
+
+# Overview
+# get kubectl vsphere plugin
+# kubectl config use-context <supervisor-context>
+# kubectl apply -f <new-tap-cluster>
+# kubectl config use-context <tap-cluster>
+# init tanzu cli - https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.4/tap/install-tanzu-cli.html#install-or-update-the-tanzu-cli-and-plugins-3
+# 
+
+export INGRESS_DOMAIN=$(yq eval '.ingress_domain' ./config/values.yaml)
 export minioURL=minio.$INGRESS_DOMAIN
-export HARBOR_URL=$(yq eval '.image_registry' ./gorkem/values.yaml)
-export HARBOR_USERNAME=$(yq eval '.image_registry_user' ./gorkem/values.yaml)
-export HARBOR_PASSWORD=$(yq eval '.image_registry_password' ./gorkem/values.yaml)
-export HARBOR_TAP_REPO=$(yq eval '.image_registry_tap' ./gorkem/values.yaml)
-export pivnet_token=$(yq eval '.pivnet_token' ./gorkem/values.yaml)
+export HARBOR_URL=$(yq eval '.image_registry' ./config/values.yaml)
+export HARBOR_USERNAME=$(yq eval '.image_registry_user' ./config/values.yaml)
+export HARBOR_PASSWORD=$(yq eval '.image_registry_password' ./config/values.yaml)
+export HARBOR_TAP_REPO=$(yq eval '.image_registry_tap' ./config/values.yaml)
+export pivnet_token=$(yq eval '.pivnet_token' ./config/values.yaml)
 export IMGPKG_REGISTRY_HOSTNAME_0=registry.tanzu.vmware.com
 export IMGPKG_REGISTRY_USERNAME_0=$(yq eval '.tanzuNet_username' gorkem/values.yaml)
 export IMGPKG_REGISTRY_PASSWORD_0=$(yq eval '.tanzuNet_password' gorkem/values.yaml)
-export IMGPKG_REGISTRY_HOSTNAME_1=$(yq eval '.image_registry' ./gorkem/values.yaml)
-export IMGPKG_REGISTRY_USERNAME_1=$(yq eval '.image_registry_user' ./gorkem/values.yaml)
-export IMGPKG_REGISTRY_PASSWORD_1=$(yq eval '.image_registry_password' ./gorkem/values.yaml)
-export IMGPKG_REGISTRY_HOSTNAME=$(yq eval '.image_registry' ./gorkem/values.yaml)
-export IMGPKG_REGISTRY_USERNAME=$(yq eval '.image_registry_user' ./gorkem/values.yaml)
-export IMGPKG_REGISTRY_PASSWORD=$(yq eval '.image_registry_password' ./gorkem/values.yaml)
-export TAP_VERSION=$(yq eval '.tap_version' ./gorkem/values.yaml)
-export TBS_VERSION=$(yq eval '.tbs_version' ./gorkem/values.yaml)
-yq eval '.ca_cert_data' ./gorkem/values.yaml | sed 's/^[ ]*//' > ./gorkem/ca.crt
+export IMGPKG_REGISTRY_HOSTNAME_1=$(yq eval '.image_registry' ./config/values.yaml)
+export IMGPKG_REGISTRY_USERNAME_1=$(yq eval '.image_registry_user' ./config/values.yaml)
+export IMGPKG_REGISTRY_PASSWORD_1=$(yq eval '.image_registry_password' ./config/values.yaml)
+export IMGPKG_REGISTRY_HOSTNAME=$(yq eval '.image_registry' ./config/values.yaml)
+export IMGPKG_REGISTRY_USERNAME=$(yq eval '.image_registry_user' ./config/values.yaml)
+export IMGPKG_REGISTRY_PASSWORD=$(yq eval '.image_registry_password' ./config/values.yaml)
+export TAP_VERSION=$(yq eval '.tap_version' ./config/values.yaml)
+export TBS_VERSION=$(yq eval '.tbs_version' ./config/values.yaml)
+yq eval '.ca_cert_data' ./config/values.yaml | sed 's/^[ ]*//' > ./config/ca.crt
 export REGISTRY_CA_PATH="$(pwd)/gorkem/ca.crt"
 export TAP_PKGR_REPO=$IMGPKG_REGISTRY_HOSTNAME_1/tap-packages/tap
 pivnet login --api-token $pivnet_token
@@ -98,7 +127,7 @@ if [ "$1" = "prep" ]; then
     sed -i -e "s|toolbox-data.anchore.io|$minioURL|g" listing.json
     
     echo "Downloading tool images"
-    export tool_images=$(cat ../gorkem/templates/tools/*.yaml|grep "image: "|awk '{ print $2 }')
+    export tool_images=$(cat ../config/templates/tools/*.yaml|grep "image: "|awk '{ print $2 }')
     mkdir -p images
     for image in $tool_images
     do

@@ -1,0 +1,35 @@
+#@data/values
+---
+acs: true
+acs_version: 2.0.0
+airgapped: true
+ca_cert_data: |
+  -----BEGIN CERTIFICATE-----
+  MIIFXzCCA0egAwIBAgIJAJYm37SFocjlMA0GCSqGSIb3DQEBDQUAMEY...
+  -----END CERTIFICATE-----
+ca_cert_key: |
+  -----BEGIN PRIVATE KEY-----
+  MIIFXzCCA0egAwIBAgIJAJYm37SFocjlMA0GCSqGSIb3DQEBDQUAMEY...
+  -----END PRIVATE KEY-----
+git_password: VMware1!
+git_repo: git.tap.corp.com
+git_user: tanzu
+image_registry_build: tap-15/build
+image_registry: harbor.tap.corp.com
+image_registry_password: VMware1!
+image_registry_supply_chain: tap-15/supplychain
+image_registry_tap: tap-15
+image_registry_user: admin
+ingress_domain: tap.corp.com
+maven_repo: https://nexus-80.tap.corp.com/repository/maven-central/
+pivnet_token: token-here
+profile: full # supports only full profile for now
+scg: true
+scg_version: 2.0.0-tap.3
+supply_chain: basic # or testing or testing_scanning
+tanzuNet_password: 'password'
+tanzuNet_username: 'username@corp.com'
+tap_version: 1.4.5
+tbs_full_deps: true
+tbs_version: 1.10.8
+tkg_cluster_name: tap-dev
