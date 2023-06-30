@@ -1,10 +1,10 @@
-gorkem/tmp-enc/key.txt
-gorkem/tmp-enc/tap-sensitive-values.yaml
-gorkem/tanzu-cluster-essentials/
-gorkem/tanzu-cluster-essentials-*.tgz
+config/tmp-enc/key.txt
+config/tmp-enc/tap-sensitive-values.yaml
+config/tanzu-cluster-essentials/
+config/tanzu-cluster-essentials-*.tgz
 tanzu-gitops-ri-*.tgz
-gorkem/values.yaml
-gorkem/ca.crt
+config/values.yaml
+config/ca.crt
 *.tgz
 *.tar
 airgapped-files/*
