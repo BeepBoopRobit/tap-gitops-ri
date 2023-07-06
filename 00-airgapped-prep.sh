@@ -19,7 +19,7 @@ fi
 # We have a wildcard cert for our TAP domain
 
 # TODOs:
-# remove Minio and plan to use Nexus.  Also Assume a Nexus is up
+# remove Minio and plan to use Nexus.  Also Assume a Nexus is up.  We can use the container to start?
 # plan to install tools on an AlmaLinux docker image
 # tools to install:
 # tanzu
