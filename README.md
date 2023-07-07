@@ -2,15 +2,18 @@
 
 ## Getting Started Quick
 
+Run the docker build script
+```000-docker-build.sh```
+
 Fork the repo and update the ```01-setup.sh``` on Line 171 with your repo.
 
 Create the ```values.yaml``` from the ```values-template.yaml``` file.
 
 ```
-$ cp ./gorkem/templates/values-template.yaml ./gorkem/values.yaml
+$ cp ./config/templates/values-template.yaml ./gorkem/values.yaml
 ```
 
-Then, update the ```./gorkem/values.yaml``` file for TAP values.
+Then, update the ```./config/values.yaml``` file for TAP values.
 
 If you need to create required certificates:
 ```
