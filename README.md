@@ -10,7 +10,7 @@ Fork the repo and update the ```01-setup.sh``` on Line 171 with your repo.
 Create the ```values.yaml``` from the ```values-template.yaml``` file.
 
 ```
-$ cp ./config/templates/values-template.yaml ./gorkem/values.yaml
+$ cp ./config/templates/values-template.yaml ./config/values.yaml
 ```
 
 Then, update the ```./config/values.yaml``` file for TAP values.
